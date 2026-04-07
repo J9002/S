@@ -3,29 +3,39 @@
     <head>
         <title>John Website</title>
         <link rel="icon" type="image/x-icon" href="images/favicon.png">
+
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
         <style>
             body {
                 font-family: monospace;
                 background-color: #3d3d5c;
-                color: #e0e0e0;}
+                color: #e0e0e0;
+            }
+            button {
+                background-color: rgb(30, 60, 70);
+                border-radius: 2px;
+                cursor: pointer;
+            }
             .center {
                 display: flex;
                 justify-content: center;
                 align-items: center;
             }
             .center img {
-                width: 34%;
+                width: 32vw;
+            }
+            .footer {
+                position: fixed;
+                left: 0;
+                bottom: 0;
+                width: 100%;
             }
         </style>
     </head>
+
     <body>
-        <h1>John Website</h1>
-        <h2>Yes it is he, John Website</h2>
-        <div class="center">
-            <img src="images/maxwell.gif" alt="Maxwell">
-        </div>
         <audio autoplay loop id="music">
             <source src="audio/audio.mp3">
         </audio>
@@ -33,5 +43,22 @@
             var audio = document.getElementById("music");
             audio.volume = 0.25;
         </script>
+
+        <h1>John Website</h1>
+        <h2>Yes it is he, John Website</h2>
+
+        <div class="center">
+            <img src="images/maxwell.gif" alt="Maxwell">
+        </div>
+
+        <div class="footer">
+            <button onclick="button_function()">B</button>
+        </div>
+        <script>
+            function button_function() {
+                alert("b")
+            }
+        </script>
+
     </body>
 </html>
