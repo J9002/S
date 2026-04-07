@@ -55,8 +55,9 @@
             <button onclick="button_function()">B</button>
         </div>
         <script>
-            function button_function() {
-                alert("b")
+            async function button_function() {
+                var x = await fetch('data.txt').then(r => r.text());
+                alert(x);
             }
         </script>
 
