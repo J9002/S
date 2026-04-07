@@ -48,25 +48,42 @@
         </div>
 
         <!--AUDIO INIT AND CONTROLS-->
+        <audio autoplay loop id="music">
+            <source id="audio" src="" type="audio/mpeg">
+        </audio>
+
         <div class="footer">
             <text>Volume: </text>
             <button onclick="volumeUp()">˄</button>
             <button onclick="volumeDown()">˅</button>
+            <button onclick="changeSong()">Change Song</button>
         </div>
 
-        <audio autoplay loop id="music">
-            <source src="audio/audio.mp3">
-        </audio>
-
         <script>
+            //INIT VARIABLES
+            var chosenAudio = "Mambo.mp3";
+            var sourceElement = document.getElementById('audio');
+            var audioElement = document.getElementById("music");
             var audio = document.getElementById("music");
-            audio.volume = 0.25;
 
+            //INIT AUDIO PLAYER
+            audio.volume = 0.25;
+            sourceElement.src = `audio/${chosenAudio}`;
+            audioElement.load();
+
+            //CHANGE VOLUME
             function volumeUp() {
                 audio.volume += 0.05;
             }
             function volumeDown() {
                 audio.volume -= 0.05;
+            }
+
+            //CHANGE AUDIO
+            function changeSong() {
+                chosenAudio = "Koi No Disco Queen.mp3";
+                sourceElement.src = `audio/${chosenAudio}`;
+                audioElement.load();
             }
         </script>
     </body>
