@@ -49,15 +49,19 @@
 
         <!--AUDIO INIT AND CONTROLS-->
         <div class="footer">
+            <text>Volume: </text>
             <button onclick="volumeUp()">˄</button>
             <button onclick="volumeDown()">˅</button>
         </div>
+
         <audio autoplay loop id="music">
             <source src="audio/audio.mp3">
         </audio>
+
         <script>
             var audio = document.getElementById("music");
             audio.volume = 0.25;
+
             function volumeUp() {
                 audio.volume += 0.05;
             }
