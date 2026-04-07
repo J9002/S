@@ -20,6 +20,25 @@
                 border-radius: 2px;
                 cursor: pointer;
             }
+            .overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 9999;
+                color: black;
+                background-color: rgba(0, 0, 0, 0.9);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+            }
+            .hidden {
+                display: none;
+                visibility: hidden;
+                pointer-events: none;
+            }
             .center {
                 display: flex;
                 justify-content: center;
@@ -38,6 +57,20 @@
     </head>
 
     <body>
+        <!--OVERLAY-->
+        <div id="overlay" class="overlay">
+            <img src="images/favicon.png" alt="">
+        </div>
+
+        <script>
+            var overlay = document.getElementById("overlay");
+            function hideOverlay() {
+                overlay.classList.add("hidden");
+                audioElement.play();
+            }
+            overlay.addEventListener("click", hideOverlay);
+        </script>
+
         <!--HEADERS-->
         <h1>John Website</h1>
         <h2>Yes it is him, John Website</h2>
@@ -48,7 +81,7 @@
         </div>
 
         <!--AUDIO INIT AND CONTROLS-->
-        <audio autoplay loop id="music">
+        <audio loop id="music">
             <source id="audio" src="" type="audio/mpeg">
         </audio>
 
@@ -64,19 +97,18 @@
             var chosenAudio = "Mambo.mp3";
             var sourceElement = document.getElementById('audio');
             var audioElement = document.getElementById("music");
-            var audio = document.getElementById("music");
 
             //INIT AUDIO PLAYER
-            audio.volume = 0.25;
+            audioElement.volume = 0.25;
             sourceElement.src = `audio/${chosenAudio}`;
             audioElement.load();
 
             //CHANGE VOLUME
             function volumeUp() {
-                audio.volume += 0.05;
+                audioElement.volume += 0.05;
             }
             function volumeDown() {
-                audio.volume -= 0.05;
+                audioElement.volume -= 0.05;
             }
 
             //CHANGE AUDIO
@@ -84,6 +116,11 @@
                 chosenAudio = "Koi No Disco Queen.mp3";
                 sourceElement.src = `audio/${chosenAudio}`;
                 audioElement.load();
+                if (overlay.classList.contains('hidden')) {
+                    setTimeout(() => {
+                    audioElement.play();
+                    }, 100);
+                }
             }
         </script>
     </body>
