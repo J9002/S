@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <!--TAB INIT AND METAS-->
         <title>John Website</title>
         <link rel="icon" type="image/x-icon" href="images/favicon.png">
 
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+        <!--CSS STYLING-->
         <style>
             body {
                 font-family: monospace;
@@ -36,13 +38,26 @@
     </head>
 
     <body>
+        <!--HEADERS-->
+        <h1>John Website</h1>
+        <h2>Yes it is him, John Website</h2>
+
+        <!--MAIN CONTENT-->
+        <div class="center">
+            <img src="images/maxwell.gif" alt="Maxwell">
+        </div>
+
+        <!--AUDIO INIT AND CONTROLS-->
+        <div class="footer">
+            <button onclick="volumeUp()">˄</button>
+            <button onclick="volumeDown()">˅</button>
+        </div>
         <audio autoplay loop id="music">
             <source src="audio/audio.mp3">
         </audio>
         <script>
             var audio = document.getElementById("music");
             audio.volume = 0.25;
-
             function volumeUp() {
                 audio.volume += 0.05;
             }
@@ -50,17 +65,5 @@
                 audio.volume -= 0.05;
             }
         </script>
-
-        <h1>John Website</h1>
-        <h2>Yes it is him, John Website</h2>
-
-        <div class="center">
-            <img src="images/maxwell.gif" alt="Maxwell">
-        </div>
-
-        <div class="footer">
-            <button onclick="volumeUp()">˄</button>
-            <button onclick="volumeDown()">˅</button>
-        </div>
     </body>
 </html>
