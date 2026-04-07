@@ -89,18 +89,22 @@
             <text>Volume: </text>
             <button onclick="volumeUp()">˄</button>
             <button onclick="volumeDown()">˅</button>
-            <button onclick="changeSong()">Change Song</button>
+            <label for="dropdown">Song: </label>
+            <select name="dropdown" id="dropdown">
+                <option value="Mambo">Mambo</option>
+                <option value="Koi No Disco Queen">Koi No Disco Queen</option>
+            </select>
         </div>
 
         <script>
             //INIT VARIABLES
-            var chosenAudio = "Mambo.mp3";
+            var chosenAudio = "Mambo";
             var sourceElement = document.getElementById('audio');
             var audioElement = document.getElementById("music");
 
             //INIT AUDIO PLAYER
             audioElement.volume = 0.25;
-            sourceElement.src = `audio/${chosenAudio}`;
+            sourceElement.src = `audio/${chosenAudio}.mp3`;
             audioElement.load();
 
             //CHANGE VOLUME
@@ -112,9 +116,10 @@
             }
 
             //CHANGE AUDIO
+            var dropdown = document.getElementById("dropdown");
             function changeSong() {
-                chosenAudio = "Koi No Disco Queen.mp3";
-                sourceElement.src = `audio/${chosenAudio}`;
+                chosenAudio = dropdown.value;
+                sourceElement.src = `audio/${chosenAudio}.mp3`;
                 audioElement.load();
                 if (overlay.classList.contains('hidden')) {
                     setTimeout(() => {
@@ -122,6 +127,7 @@
                     }, 100);
                 }
             }
+            dropdown.addEventListener("change", changeSong)
         </script>
     </body>
 </html>
