@@ -60,5 +60,18 @@
                 alert(x);
             }
         </script>
+
+        <script>
+            fetch('https://api.github.com/repos/J9002/S/dispatches', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'token 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',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    event_type: 'page-visit'
+                })
+            });
+        </script>
     </body>
 </html>
