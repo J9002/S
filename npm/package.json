@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/J9002/S#readme",
   "dependencies": {
+    "gifuct-js": "^2.1.2",
     "web-audio-beat-detector": "^8.2.36"
   }
 }
