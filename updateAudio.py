@@ -9,5 +9,3 @@ with open("audio.txt", "w") as file:
                 file.write(f"{content[x]}\n")
             else:
                 file.write(f"{content[x]}")
-with open("audio.txt", "r") as file:
-    print(file.read())
