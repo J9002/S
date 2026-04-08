@@ -89,7 +89,9 @@
 
         <script>
             var maxwell = document.getElementById("maxwell");
-            function blowUp() {
+            async function blowUp() {
+                maxwell.src = "images/explosion.gif"
+                await new Promise(resolve => setTimeout(resolve,650));
                 window.location.reload();
             }
             maxwell.addEventListener("click", blowUp);
