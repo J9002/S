@@ -17,6 +17,13 @@
             }
             button {
                 background-color: rgb(30, 60, 70);
+                color: #e0e0e0;
+                border-radius: 2px;
+                cursor: pointer;
+            }
+            select {
+                background-color:rgb(30, 60, 70);
+                color: #e0e0e0;
                 border-radius: 2px;
                 cursor: pointer;
             }
@@ -74,7 +81,6 @@
         <!--HEADERS-->
         <h1>John Website</h1>
         <h2>Yes it is him, John Website</h2>
-        <h2 id="steve"></h2>
 
         <!--MAIN CONTENT-->
         <div class="center">
@@ -91,10 +97,7 @@
             <button onclick="volumeUp()">˄</button>
             <button onclick="volumeDown()">˅</button>
             <label for="dropdown">Song: </label>
-            <select name="dropdown" id="dropdown">
-                <option value="Mambo">Mambo</option>
-                <option value="Koi No Disco Queen">Koi No Disco Queen</option>
-            </select>
+            <select name="dropdown" id="dropdown"></select>
         </div>
 
         <script>
@@ -133,8 +136,11 @@
             fetch("audio.txt")
                 .then(response => response.text())
                 .then(data => {
-                    audioFiles = data.split("\n")
-                    document.getElementById("steve").textContent = audioFiles.join(", ");
+                    var audioFiles = data.split("\n");
+                    audioFiles.forEach(function(songName) {
+                    songName = songName.trim();
+                    if (songName) dropdown.appendChild(new Option(songName, songName));
+                    });
                 });
         </script>
     </body>
