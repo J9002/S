@@ -91,12 +91,13 @@
             var maxwell = document.getElementById("maxwell");
             async function blowUp() {
                 audioElement.pause()
-                await new Promise(resolve => setTimeout(resolve, 20))
                 sourceElement.src = "soundEffects/explosion.mp3";
+                audioElement.volume = 1;
                 audioElement.load();
+                await new Promise(resolve => setTimeout(resolve, 20))
                 audioElement.play();
                 maxwell.src = "images/explosion.gif"
-                await new Promise(resolve => setTimeout(resolve,680));
+                await new Promise(resolve => setTimeout(resolve,700));
                 window.location.reload();
             }
             maxwell.addEventListener("click", blowUp);
