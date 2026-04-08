@@ -12,6 +12,6 @@ with open("audio.txt", "w") as file:
                 file.write(f"{content[x]}")
 def git_push():
     subprocess.run(["git", "add", "."], check=True)
-    subprocess.run(["git", "commit", "-m", "automated commit"], check=True)
+    subprocess.run(["git", "commit", "-m", "makey makey (automated)"], check=True)
     subprocess.run(["git", "push", "origin", "main"], check=True)
 git_push()
