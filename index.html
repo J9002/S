@@ -74,6 +74,7 @@
         <!--HEADERS-->
         <h1>John Website</h1>
         <h2>Yes it is him, John Website</h2>
+        <h2 id="steve"></h2>
 
         <!--MAIN CONTENT-->
         <div class="center">
@@ -128,6 +129,13 @@
                 }
             }
             dropdown.addEventListener("change", changeSong)
+
+            fetch("audio.txt")
+                .then(response => response.text())
+                .then(data => {
+                    audioFiles = data.split("\n")
+                    document.getElementById("steve").textContent = audioFiles.join(", ");
+                });
         </script>
     </body>
 </html>
