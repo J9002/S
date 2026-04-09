@@ -99,9 +99,7 @@
             <text>Volume: </text>
             <button onclick="volumeUp()">˄</button>
             <button onclick="volumeDown()">˅</button>
-            <label for="dropdown">Songs: </label>
-            <select name="dropdown" id="dropdown"></select>
-            <label>Add Custom Song: </label>
+            <text>Add Custom Song: </text>
             <input type="file" accept=".mp3,audio/mpeg" style="display:none" id="hiddenInput">
                 <button onclick="document.getElementById('hiddenInput').click()">Select File</button>
                 <span id="nameDisplay"></span>
@@ -111,11 +109,13 @@
                         document.getElementById('nameDisplay').textContent = f ? " " + f.name.slice(0, -4) : 'None';
                         userSongURL.createObjectURL(f) //makes temp url to hold user file, needs to go through name slicing, bpm detection, and be added to the dropdown
                     }
-                </script>        
+                </script>      
+            <text>Songs: </text>
+            <select name="dropdown" id="dropdown"></select>  
         </div>
 
+        <!--BPM MODULE-->
         <script type="module">
-            //BPM MODULE
             import BeatDetect from './external/BeatDetect.js';
             window.beatDetect = new BeatDetect({
                 sampleRate: 44100,
@@ -164,7 +164,7 @@
             document.addEventListener("DOMContentLoaded", function() {
             audioElement.volume = 0.25;
             
-            //CHANGE VOLUME
+            //CHANGE VOLUME CTRLS
             window.volumeUp = function() {
                 audioElement.volume += 0.05;
             }
@@ -172,7 +172,7 @@
                 audioElement.volume -= 0.05;
             }
 
-            //CHANGE AUDIO
+            //CHANGE AUDIO AND GET BPM
             var dropdown = document.getElementById("dropdown");
             
             async function loadSong(songName) {
