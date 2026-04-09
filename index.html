@@ -90,31 +90,33 @@
         <script>
             var maxwell = document.getElementById("maxwell");
             async function blowUp() {
-                audioElement.pause()
+                audioElement.pause();
                 sourceElement.src = "soundEffects/explosion.mp3";
                 audioElement.volume = 1;
                 audioElement.load();
-                await new Promise(resolve => setTimeout(resolve, 20))
+                await new Promise(resolve => setTimeout(resolve, 20));
                 audioElement.play();
-                maxwell.src = "images/explosion.gif"
+                maxwell.src = "images/explosion.gif";
                 await new Promise(resolve => setTimeout(resolve,700));
                 window.location.reload();
             }
             maxwell.addEventListener("click", blowUp);
 
             async function johnKaisen() {
-                audioElement.pause()
+                var userAudioCurrent = sourceElement.src;
+                var userVolCurrent = audioElement.volume;
+                audioElement.pause();
                 sourceElement.src = "soundEffects/John Kaisen.mp3";
                 audioElement.volume = 1;
                 audioElement.load();
-                await new Promise(resolve => setTimeout(resolve, 50))
+                await new Promise(resolve => setTimeout(resolve, 50));
                 audioElement.play();
                 maxwell.src = "images/John Kaisen.png";
                 await new Promise(resolve => setTimeout(resolve, 1750));
                 maxwell.src = "images/maxwell.gif";
-                audioElement.pause()
-                sourceElement.src = "audio/Mambo.mp3";
-                audioElement.volume = 0.25;
+                audioElement.pause();
+                sourceElement.src = userAudioCurrent;
+                audioElement.volume = userVolCurrent;
                 audioElement.load();
                 audioElement.play();
             }
