@@ -71,12 +71,12 @@
         </div>
 
         <script>
-            var overlay = document.getElementById("overlay");
+            window.overlay = document.getElementById("overlay");
             function hideOverlay() {
-                overlay.classList.add("hidden");
+                window.overlay.classList.add("hidden");
                 audioElement.play();
             }
-            overlay.addEventListener("click", hideOverlay);
+            window.overlay.addEventListener("click", hideOverlay);
         </script>
 
         <!--HEADERS-->
@@ -89,23 +89,6 @@
                 <source src="images/maxwell.mp4" type="video/mp4">
             </video>
         </div>
-
-
-        <script>
-            var maxwell = document.getElementById("maxwell");
-            async function blowUp() {
-                audioElement.pause()
-                sourceElement.src = "soundEffects/explosion.mp3";
-                audioElement.volume = 1;
-                audioElement.load();
-                await new Promise(resolve => setTimeout(resolve, 20))
-                audioElement.play();
-                maxwell.src = "images/explosion.mp4"
-                await new Promise(resolve => setTimeout(resolve,800));
-                window.location.reload();
-            }
-            maxwell.addEventListener("click", blowUp);
-        </script>
 
         <!--AUDIO INIT AND CONTROLS-->
         <audio loop id="music">
@@ -120,22 +103,69 @@
             <select name="dropdown" id="dropdown"></select>
         </div>
 
+        <script type="module">
+            //BPM MODULE
+            import BeatDetect from './external/BeatDetect.js';
+            window.beatDetect = new BeatDetect({
+                sampleRate: 44100,
+                log: false,
+                perf: false,
+                round: false,
+                float: 4,
+                lowPassFreq: 150,
+                highPassFreq: 100,
+                bpmRange: [90, 180],
+                timeSignature: 4
+            });
+            window.BPM = 120;
+        </script>
+
         <script>
             //INIT VARIABLES
             var chosenAudio = "Mambo";
             var sourceElement = document.getElementById('audio');
             var audioElement = document.getElementById("music");
+            var maxwell = document.getElementById("maxwell");
+            var video = document.querySelector("video");
 
-            //INIT AUDIO PLAYER
+            function updateVideoSpeed() {
+                video.playbackRate = (window.BPM / 100);
+            }
+
+            var BPM = window.BPM || 120;
+            video.playbackRate = (BPM / 100);
+
+            async function blowUp() {
+                audioElement.pause();
+                sourceElement.src = "soundEffects/explosion.mp3";
+                audioElement.volume = 1;
+                audioElement.load();
+                await new Promise(resolve => setTimeout(resolve, 20));
+                audioElement.play();
+                video.playbackRate = 1;
+                maxwell.src = "images/explosion.mp4";
+                await new Promise(resolve => setTimeout(resolve, 680));
+                window.location.reload();
+            }
+            maxwell.addEventListener("click", blowUp);
+        </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
             audioElement.volume = 0.25;
             sourceElement.src = `audio/${chosenAudio}.mp3`;
+        
+            window.beatDetect.getBeatInfo({url: `audio/${chosenAudio}.mp3`}).then(info => {
+                window.BPM = info.bpm;
+                updateVideoSpeed();
+            });
             audioElement.load();
 
             //CHANGE VOLUME
-            function volumeUp() {
+            window.volumeUp = function() {
                 audioElement.volume += 0.05;
             }
-            function volumeDown() {
+            window.volumeDown = function() {
                 audioElement.volume -= 0.05;
             }
 
@@ -144,14 +174,18 @@
             function changeSong() {
                 chosenAudio = dropdown.value;
                 sourceElement.src = `audio/${chosenAudio}.mp3`;
+                window.beatDetect.getBeatInfo({url: `audio/${chosenAudio}.mp3`}).then(info => {
+                    window.BPM = info.bpm;
+                    updateVideoSpeed();
+                });
                 audioElement.load();
-                if (overlay.classList.contains('hidden')) {
+                if (window.overlay.classList.contains('hidden')) {
                     setTimeout(() => {
-                    audioElement.play();
+                        audioElement.play();
                     }, 100);
                 }
             }
-            dropdown.addEventListener("change", changeSong)
+            dropdown.addEventListener("change", changeSong);
 
             //PARSE AUDIO NAMES AND ADD TO MENU
             fetch("audio.txt")
@@ -159,10 +193,11 @@
                 .then(data => {
                     var audioFiles = data.split("\n");
                     audioFiles.forEach(function(songName) {
-                    songName = songName.trim();
-                    if (songName) dropdown.appendChild(new Option(songName, songName));
+                        songName = songName.trim();
+                        if (songName) dropdown.appendChild(new Option(songName, songName));
                     });
                 });
+            });
         </script>
     </body>
 </html>
