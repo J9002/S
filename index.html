@@ -99,8 +99,19 @@
             <text>Volume: </text>
             <button onclick="volumeUp()">˄</button>
             <button onclick="volumeDown()">˅</button>
-            <label for="dropdown">Song Presets: </label>
+            <label for="dropdown">Songs: </label>
             <select name="dropdown" id="dropdown"></select>
+            <label>Add Custom Song: </label>
+            <input type="file" accept=".mp3,audio/mpeg" style="display:none" id="hiddenInput">
+                <button onclick="document.getElementById('hiddenInput').click()">Select File</button>
+                <span id="nameDisplay"></span>
+                <script>
+                    document.getElementById('hiddenInput').onchange = function() {
+                        let f = this.files[0];
+                        document.getElementById('nameDisplay').textContent = f ? " " + f.name.slice(0, -4) : 'None';
+                        userSongURL.createObjectURL(f) //makes temp url to hold user file, needs to go through name slicing, bpm detection, and be added to the dropdown
+                    }
+                </script>        
         </div>
 
         <script type="module">
