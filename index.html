@@ -51,9 +51,8 @@
                 justify-content: center;
                 align-items: center;
             }
-            .center video {
+            .center img {
                 width: 32vw;
-                display: block;
             }
             .footer {
                 position: fixed;
@@ -71,12 +70,12 @@
         </div>
 
         <script>
-            window.overlay = document.getElementById("overlay");
+            var overlay = document.getElementById("overlay");
             function hideOverlay() {
-                window.overlay.classList.add("hidden");
+                overlay.classList.add("hidden");
                 audioElement.play();
             }
-            window.overlay.addEventListener("click", hideOverlay);
+            overlay.addEventListener("click", hideOverlay);
         </script>
 
         <!--HEADERS-->
@@ -85,10 +84,24 @@
 
         <!--MAIN CONTENT-->
         <div class="center">
-            <video autoplay muted loop playsinline style="pointer-events: auto;" id="maxwell">
-                <source src="images/maxwell.mp4" type="video/mp4">
-            </video>
+            <img id="maxwell" src="images/maxwell.gif" alt="Maxwell">
         </div>
+
+        <script>
+            var maxwell = document.getElementById("maxwell");
+            async function blowUp() {
+                audioElement.pause()
+                sourceElement.src = "soundEffects/explosion.mp3";
+                audioElement.volume = 1;
+                audioElement.load();
+                await new Promise(resolve => setTimeout(resolve, 20))
+                audioElement.play();
+                maxwell.src = "images/explosion.gif"
+                await new Promise(resolve => setTimeout(resolve,700));
+                window.location.reload();
+            }
+            maxwell.addEventListener("click", blowUp);
+        </script>
 
         <!--AUDIO INIT AND CONTROLS-->
         <audio loop id="music">
@@ -99,107 +112,42 @@
             <text>Volume: </text>
             <button onclick="volumeUp()">˄</button>
             <button onclick="volumeDown()">˅</button>
-            <text>Add Custom Song: </text>
-            <input type="file" accept=".mp3,audio/mpeg" style="display:none" id="hiddenInput">
-                <button onclick="document.getElementById('hiddenInput').click()">Select File</button>
-                <span id="nameDisplay"></span>
-                <script>
-                    document.getElementById('hiddenInput').onchange = function() {
-                        let f = this.files[0];
-                        document.getElementById('nameDisplay').textContent = f ? " " + f.name.slice(0, -4) : 'None';
-                        userSongURL.createObjectURL(f) //makes temp url to hold user file, needs to go through name slicing, bpm detection, and be added to the dropdown
-                    }
-                </script>      
-            <text>Songs: </text>
-            <select name="dropdown" id="dropdown"></select>  
+            <label for="dropdown">Song: </label>
+            <select name="dropdown" id="dropdown"></select>
         </div>
-
-        <!--BPM MODULE-->
-        <script type="module">
-            import BeatDetect from './external/BeatDetect.js';
-            window.beatDetect = new BeatDetect({
-                sampleRate: 44100,
-                log: false,
-                perf: false,
-                round: false,
-                float: 4,
-                lowPassFreq: 150,
-                highPassFreq: 100,
-                bpmRange: [90, 180],
-                timeSignature: 4
-            });
-            window.BPM = null;
-        </script>
 
         <script>
             //INIT VARIABLES
             var chosenAudio = "Mambo";
             var sourceElement = document.getElementById('audio');
             var audioElement = document.getElementById("music");
-            var maxwell = document.getElementById("maxwell");
-            var video = document.querySelector("video");
 
-            function updateVideoSpeed() {
-                if (window.BPM) {
-                    video.playbackRate = (window.BPM / 100);
-                }
-            }
-
-            async function blowUp() {
-                audioElement.pause();
-                sourceElement.src = "soundEffects/explosion.mp3";
-                audioElement.volume = 1;
-                audioElement.load();
-                await new Promise(resolve => setTimeout(resolve, 20));
-                audioElement.play();
-                video.playbackRate = 1;
-                maxwell.src = "images/explosion.mp4";
-                await new Promise(resolve => setTimeout(resolve, 680));
-                window.location.reload();
-            }
-            maxwell.addEventListener("click", blowUp);
-        </script>
-
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
+            //INIT AUDIO PLAYER
             audioElement.volume = 0.25;
-            
-            //CHANGE VOLUME CTRLS
-            window.volumeUp = function() {
+            sourceElement.src = `audio/${chosenAudio}.mp3`;
+            audioElement.load();
+
+            //CHANGE VOLUME
+            function volumeUp() {
                 audioElement.volume += 0.05;
             }
-            window.volumeDown = function() {
+            function volumeDown() {
                 audioElement.volume -= 0.05;
             }
 
-            //CHANGE AUDIO AND GET BPM
+            //CHANGE AUDIO
             var dropdown = document.getElementById("dropdown");
-            
-            async function loadSong(songName) {
-                chosenAudio = songName;
+            function changeSong() {
+                chosenAudio = dropdown.value;
                 sourceElement.src = `audio/${chosenAudio}.mp3`;
                 audioElement.load();
-                
-                try {
-                    const info = await window.beatDetect.getBeatInfo({url: `audio/${chosenAudio}.mp3`});
-                    window.BPM = info.bpm;
-                    updateVideoSpeed();
-                } catch (error) {
-                    window.BPM = 120;
-                    updateVideoSpeed();
-                }
-                
-                if (window.overlay.classList.contains('hidden')) {
+                if (overlay.classList.contains('hidden')) {
                     setTimeout(() => {
-                        audioElement.play();
+                    audioElement.play();
                     }, 100);
                 }
             }
-            
-            function changeSong() {
-                loadSong(dropdown.value);
-            }
-            dropdown.addEventListener("change", changeSong);
+            dropdown.addEventListener("change", changeSong)
 
             //PARSE AUDIO NAMES AND ADD TO MENU
             fetch("audio.txt")
@@ -207,15 +155,10 @@
                 .then(data => {
                     var audioFiles = data.split("\n");
                     audioFiles.forEach(function(songName) {
-                        songName = songName.trim();
-                        if (songName) {
-                            let option = new Option(songName, songName);
-                            dropdown.appendChild(option);
-                        }
+                    songName = songName.trim();
+                    if (songName) dropdown.appendChild(new Option(songName, songName));
                     });
-                    loadSong(chosenAudio);
                 });
-            });
         </script>
     </body>
 </html>
