@@ -117,7 +117,7 @@
                 bpmRange: [90, 180],
                 timeSignature: 4
             });
-            window.BPM = 120;
+            window.BPM = null;
         </script>
 
         <script>
@@ -129,11 +129,10 @@
             var video = document.querySelector("video");
 
             function updateVideoSpeed() {
-                video.playbackRate = (window.BPM / 100);
+                if (window.BPM) {
+                    video.playbackRate = (window.BPM / 100);
+                }
             }
-
-            var BPM = window.BPM || 120;
-            video.playbackRate = (BPM / 100);
 
             async function blowUp() {
                 audioElement.pause();
@@ -153,14 +152,7 @@
         <script>
             document.addEventListener("DOMContentLoaded", function() {
             audioElement.volume = 0.25;
-            sourceElement.src = `audio/${chosenAudio}.mp3`;
-        
-            window.beatDetect.getBeatInfo({url: `audio/${chosenAudio}.mp3`}).then(info => {
-                window.BPM = info.bpm;
-                updateVideoSpeed();
-            });
-            audioElement.load();
-
+            
             //CHANGE VOLUME
             window.volumeUp = function() {
                 audioElement.volume += 0.05;
@@ -171,19 +163,30 @@
 
             //CHANGE AUDIO
             var dropdown = document.getElementById("dropdown");
-            function changeSong() {
-                chosenAudio = dropdown.value;
+            
+            async function loadSong(songName) {
+                chosenAudio = songName;
                 sourceElement.src = `audio/${chosenAudio}.mp3`;
-                window.beatDetect.getBeatInfo({url: `audio/${chosenAudio}.mp3`}).then(info => {
+                audioElement.load();
+                
+                try {
+                    const info = await window.beatDetect.getBeatInfo({url: `audio/${chosenAudio}.mp3`});
                     window.BPM = info.bpm;
                     updateVideoSpeed();
-                });
-                audioElement.load();
+                } catch (error) {
+                    window.BPM = 120;
+                    updateVideoSpeed();
+                }
+                
                 if (window.overlay.classList.contains('hidden')) {
                     setTimeout(() => {
                         audioElement.play();
                     }, 100);
                 }
+            }
+            
+            function changeSong() {
+                loadSong(dropdown.value);
             }
             dropdown.addEventListener("change", changeSong);
 
@@ -194,8 +197,12 @@
                     var audioFiles = data.split("\n");
                     audioFiles.forEach(function(songName) {
                         songName = songName.trim();
-                        if (songName) dropdown.appendChild(new Option(songName, songName));
+                        if (songName) {
+                            let option = new Option(songName, songName);
+                            dropdown.appendChild(option);
+                        }
                     });
+                    loadSong(chosenAudio);
                 });
             });
         </script>
