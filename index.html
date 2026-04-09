@@ -101,6 +101,23 @@
                 window.location.reload();
             }
             maxwell.addEventListener("click", blowUp);
+
+            async function johnKaisen() {
+                audioElement.pause()
+                sourceElement.src = "soundEffects/John Kaisen.mp3";
+                audioElement.volume = 1;
+                audioElement.load();
+                await new Promise(resolve => setTimeout(resolve, 50))
+                audioElement.play();
+                maxwell.src = "images/John Kaisen.png";
+                await new Promise(resolve => setTimeout(resolve, 1750));
+                maxwell.src = "images/maxwell.gif";
+                audioElement.pause()
+                sourceElement.src = "audio/Mambo.mp3";
+                audioElement.volume = 0.25;
+                audioElement.load();
+                audioElement.play();
+            }
         </script>
 
         <!--AUDIO INIT AND CONTROLS-->
@@ -109,10 +126,11 @@
         </audio>
 
         <div class="footer">
+            <button onclick="johnKaisen()">John Kaisen</button>
             <text>Volume: </text>
             <button onclick="volumeUp()">˄</button>
             <button onclick="volumeDown()">˅</button>
-            <label for="dropdown">Song: </label>
+            <text>Song: </text>
             <select name="dropdown" id="dropdown"></select>
         </div>
 
