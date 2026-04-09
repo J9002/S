@@ -51,8 +51,9 @@
                 justify-content: center;
                 align-items: center;
             }
-            .center img {
+            .center video {
                 width: 32vw;
+                display: block;
             }
             .footer {
                 position: fixed;
@@ -84,8 +85,11 @@
 
         <!--MAIN CONTENT-->
         <div class="center">
-            <img id="maxwell" src="images/maxwell.gif" alt="Maxwell">
+            <video autoplay muted loop playsinline style="pointer-events: auto;" id="maxwell">
+                <source src="images/maxwell.mp4" type="video/mp4">
+            </video>
         </div>
+
 
         <script>
             var maxwell = document.getElementById("maxwell");
@@ -96,8 +100,8 @@
                 audioElement.load();
                 await new Promise(resolve => setTimeout(resolve, 20))
                 audioElement.play();
-                maxwell.src = "images/explosion.gif"
-                await new Promise(resolve => setTimeout(resolve,700));
+                maxwell.src = "images/explosion.mp4"
+                await new Promise(resolve => setTimeout(resolve,800));
                 window.location.reload();
             }
             maxwell.addEventListener("click", blowUp);
